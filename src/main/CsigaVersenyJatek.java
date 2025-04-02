@@ -11,7 +11,7 @@ public class CsigaVersenyJatek {
     static final Scanner scanner = new Scanner(System.in);
 
     public CsigaVersenyJatek() {
-        palyaHossz = 50; 
+        palyaHossz = 50;
         csigak = new Csiga[3];
         csigak[0] = new Csiga("Piros");
         csigak[1] = new Csiga("Kék");
@@ -19,7 +19,7 @@ public class CsigaVersenyJatek {
         veletlen = new Random();
     }
 
-   
+    
     public void gyorsitoAd() {
         for (Csiga csiga : csigak) {
             if (veletlen.nextDouble() < 0.2) {
@@ -29,50 +29,23 @@ public class CsigaVersenyJatek {
         }
     }
 
-    
     public void versenytFuttat(String fogadottSzin) {
-        int korokSzama = 10;
-        for (int kor = 1; kor <= korokSzama; kor++) {
-            System.out.println("\n------ " + kor + ". kör ------");
+        try {
 
-          
-            gyorsitoAd();
+            String fogadottSzinLower = fogadottSzin.toLowerCase();
 
-      
-            for (Csiga csiga : csigak) {
-                csiga.halad();
+            if (!fogadottSzinLower.equals("piros")
+                    && !fogadottSzinLower.equals("kék")
+                    && !fogadottSzinLower.equals("zöld")) {
+                throw new IllegalArgumentException("Nem érvényes a fogadás. Kérlek válassz a Piros, Kék, Zöld közül!");
             }
 
-          
-            palyaRajzol();
 
-      
-            helyezesekKiir();
-
-     
-            for (Csiga csiga : csigak) {
-                csiga.gyorsitoCsokkent();
-            }
-        }
-
-     
-        Csiga gyoztes = csigak[0];
-        for (int i = 1; i < csigak.length; i++) {
-            if (csigak[i].getMegtettTav() > gyoztes.getMegtettTav()) {
-                gyoztes = csigak[i];
-            }
-        }
-
-   
-        System.out.println("\nA verseny győztese: " + gyoztes.getSzin() + " csiga!");
-        if (gyoztes.getSzin().equalsIgnoreCase(fogadottSzin)) {
-            System.out.println("Gratulálunk, nyert a fogadásod!");
-        } else {
-            System.out.println("Sajnos nem nyert a fogadásod.");
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
         }
     }
 
-    
     private void palyaRajzol() {
         for (Csiga csiga : csigak) {
             StringBuilder palya = new StringBuilder();
@@ -91,7 +64,7 @@ public class CsigaVersenyJatek {
                 } else {
                     palya.append("-");
                 }
-              
+
                 if ((i + 1) % 5 == 0) {
                     palya.append("|");
                 }
@@ -100,9 +73,8 @@ public class CsigaVersenyJatek {
         }
     }
 
-   
     private void helyezesekKiir() {
-      
+
         for (int i = 0; i < csigak.length - 1; i++) {
             int maxIndex = i;
             for (int j = i + 1; j < csigak.length; j++) {
@@ -110,7 +82,7 @@ public class CsigaVersenyJatek {
                     maxIndex = j;
                 }
             }
-          
+
             if (maxIndex != i) {
                 Csiga temp = csigak[i];
                 csigak[i] = csigak[maxIndex];
@@ -118,15 +90,11 @@ public class CsigaVersenyJatek {
             }
         }
 
-       
         System.out.print("Helyezések: ");
         for (int i = 0; i < csigak.length; i++) {
             System.out.print((i + 1) + ". " + csigak[i].getSzin() + "  ");
         }
         System.out.println();
     }
-    
-    
-    
 
 }

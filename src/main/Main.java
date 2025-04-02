@@ -9,7 +9,4 @@ public class Main {
         CsigaVersenyJatek jatek = new CsigaVersenyJatek();
         jatek.versenytFuttat(fogadas);
     }
-}
-
-
-
+}           
