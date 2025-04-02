@@ -13,9 +13,9 @@ public class CsigaVersenyJatek {
     public CsigaVersenyJatek() {
         palyaHossz = 50;
         csigak = new Csiga[3];
-        csigak[0] = new Csiga("Piros");
-        csigak[1] = new Csiga("Kék");
-        csigak[2] = new Csiga("Zöld");
+        csigak[0] = new Csiga("P");
+        csigak[1] = new Csiga("K");
+        csigak[2] = new Csiga("Z");
         veletlen = new Random();
     }
 
