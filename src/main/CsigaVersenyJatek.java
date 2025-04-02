@@ -30,46 +30,44 @@ public class CsigaVersenyJatek {
 
     public void versenytFuttat(String fogadottSzin) {
         try {
+           
+            helyezesekKiir();
+        } catch (Exception e) {
+            System.err.println("Hiba történt a gyorsító aktiválása közben: " + e.getMessage());
+            throw new RuntimeException("A gyorsító aktiválása nem sikerült: " + e.getMessage(),e); 
+        }
+        
+        int korokSzama = 10;
+        for (int kor = 1; kor <= korokSzama; kor++) {
+            System.out.println("\n------ " + kor + ". kör ------");
 
-            String fogadottSzinLower = fogadottSzin.toLowerCase();
+            gyorsitoAd();
 
-            if (!fogadottSzinLower.equals("piros")
-                    && !fogadottSzinLower.equals("kék")
-                    && !fogadottSzinLower.equals("zöld")) {
-                throw new IllegalArgumentException("Nem érvényes a fogadás. Kérlek válassz a Piros, Kék, Zöld közül!");
+            for (Csiga csiga : csigak) {
+                csiga.halad();
             }
 
-            int korokSzama = 10;
-            for (int kor = 1; kor <= korokSzama; kor++) {
-                System.out.println("\n------ " + kor + ". kör ------");
-                gyorsitoAd();
-                for (Csiga csiga : csigak) {
-                    csiga.halad();
-                }
-                palyaRajzol();
-                helyezesekKiir();
-                for (Csiga csiga : csigak) {
-                    csiga.gyorsitoCsokkent();
-                }
+            palyaRajzol();
+
+            helyezesekKiir();
+
+            for (Csiga csiga : csigak) {
+                csiga.gyorsitoCsokkent();
             }
+        }
 
-            Csiga gyoztes = csigak[0];
-            for (int i = 1; i < csigak.length; i++) {
-                if (csigak[i].getMegtettTav() > gyoztes.getMegtettTav()) {
-                    gyoztes = csigak[i];
-                }
+        Csiga gyoztes = csigak[0];
+        for (int i = 1; i < csigak.length; i++) {
+            if (csigak[i].getMegtettTav() > gyoztes.getMegtettTav()) {
+                gyoztes = csigak[i];
             }
+        }
 
-            System.out.println("\nA verseny győztese: " + gyoztes.getSzin() + " csiga!");
-
-            if (gyoztes.getSzin().toLowerCase().equals(fogadottSzinLower)) {
-                System.out.println("Gratulálunk, nyert a fogadásod!");
-            } else {
-                System.out.println("Sajnos nem nyert a fogadásod.");
-            }
-
-        } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
+        System.out.println("\nA verseny győztese: " + gyoztes.getSzin() + " csiga!");
+        if (gyoztes.getSzin().equalsIgnoreCase(fogadottSzin)) {
+            System.out.println("Gratulálunk, nyert a fogadásod!");
+        } else {
+            System.out.println("Sajnos nem nyert a fogadásod.");
         }
     }
 
@@ -83,9 +81,10 @@ public class CsigaVersenyJatek {
                     if (csiga.isGyorsitoAktiv()) {
                         palya.append("===");
                         i += 3;
-                        if (i >= palyaHossz - 1) {
-                            return;
+                        if (i >= palyaHossz) {
+                            break;
                         }
+                        continue;
                     }
                 } else {
                     palya.append("-");
