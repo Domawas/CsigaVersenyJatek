@@ -13,13 +13,12 @@ public class CsigaVersenyJatek {
     public CsigaVersenyJatek() {
         palyaHossz = 50;
         csigak = new Csiga[3];
-        csigak[0] = new Csiga("P");
-        csigak[1] = new Csiga("K");
-        csigak[2] = new Csiga("Z");
+        csigak[0] = new Csiga("Piros");
+        csigak[1] = new Csiga("Kék");
+        csigak[2] = new Csiga("Zöld");
         veletlen = new Random();
     }
 
-    
     public void gyorsitoAd() {
         for (Csiga csiga : csigak) {
             if (veletlen.nextDouble() < 0.2) {
@@ -40,6 +39,34 @@ public class CsigaVersenyJatek {
                 throw new IllegalArgumentException("Nem érvényes a fogadás. Kérlek válassz a Piros, Kék, Zöld közül!");
             }
 
+            int korokSzama = 10;
+            for (int kor = 1; kor <= korokSzama; kor++) {
+                System.out.println("\n------ " + kor + ". kör ------");
+                gyorsitoAd();
+                for (Csiga csiga : csigak) {
+                    csiga.halad();
+                }
+                palyaRajzol();
+                helyezesekKiir();
+                for (Csiga csiga : csigak) {
+                    csiga.gyorsitoCsokkent();
+                }
+            }
+
+            Csiga gyoztes = csigak[0];
+            for (int i = 1; i < csigak.length; i++) {
+                if (csigak[i].getMegtettTav() > gyoztes.getMegtettTav()) {
+                    gyoztes = csigak[i];
+                }
+            }
+
+            System.out.println("\nA verseny győztese: " + gyoztes.getSzin() + " csiga!");
+
+            if (gyoztes.getSzin().toLowerCase().equals(fogadottSzinLower)) {
+                System.out.println("Gratulálunk, nyert a fogadásod!");
+            } else {
+                System.out.println("Sajnos nem nyert a fogadásod.");
+            }
 
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
@@ -56,10 +83,9 @@ public class CsigaVersenyJatek {
                     if (csiga.isGyorsitoAktiv()) {
                         palya.append("===");
                         i += 3;
-                        if (i >= palyaHossz) {
-                            break;
+                        if (i >= palyaHossz - 1) {
+                            return;
                         }
-                        continue;
                     }
                 } else {
                     palya.append("-");
